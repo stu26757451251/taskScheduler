@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LayoutGrid, Plus, Users, UserCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -197,6 +198,7 @@ const ALERTS = [
 export default function ManagerDashboard() {
   const [selectedNewbie, setSelectedNewbie] = useState<Newbie | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("people");
 
   const handleAssignTemplate = (newbie: Newbie) => {
     setSelectedNewbie(newbie);
@@ -287,16 +289,40 @@ export default function ManagerDashboard() {
         <div className="flex flex-col gap-6 lg:flex-row">
           {/* Main content */}
           <div className="flex-1">
-            <Tabs defaultValue="people" className="w-full">
+            <Tabs defaultValue="people" className="w-full" onValueChange={setActiveTab}>
               <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <TabsList>
-                  <TabsTrigger value="people" className="gap-1.5">
-                    <Users className="size-4" />
-                    People View
+                  <TabsTrigger 
+                    value="people" 
+                    className="relative gap-1.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  >
+                    <span className="relative z-10 flex items-center gap-1.5">
+                      <Users className="size-4" />
+                      People View
+                    </span>
+                    {activeTab === "people" && (
+                      <motion.div
+                        layoutId="manager-active-tab"
+                        className="absolute inset-0 z-0 rounded-md bg-background shadow-sm dark:bg-input/30"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
                   </TabsTrigger>
-                  <TabsTrigger value="tasks" className="gap-1.5">
-                    <LayoutGrid className="size-4" />
-                    Task View
+                  <TabsTrigger 
+                    value="tasks" 
+                    className="relative gap-1.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                  >
+                    <span className="relative z-10 flex items-center gap-1.5">
+                      <LayoutGrid className="size-4" />
+                      Task View
+                    </span>
+                    {activeTab === "tasks" && (
+                      <motion.div
+                        layoutId="manager-active-tab"
+                        className="absolute inset-0 z-0 rounded-md bg-background shadow-sm dark:bg-input/30"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
                   </TabsTrigger>
                 </TabsList>
               </div>
